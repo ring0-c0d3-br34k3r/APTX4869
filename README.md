@@ -107,7 +107,4 @@ Welcome to **APTX4869**, the advanced kernel-mode driver designed for unmatched 
 
 *This project is intended for educational purposes. Always ensure you have proper authorization before deploying or testing these techniques. The driver is not complete and may have issues that could impact system stability.*
 
-https://github.com/user-attachments/assets/0531fa1c-d847-4eab-bd0f-a25e997b9358
-
-
-
+https://github.com/user-attachments/assets/7d583345-4a0a-4325-8100-06ef0d170b82
