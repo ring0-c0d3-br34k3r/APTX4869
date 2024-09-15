@@ -93,6 +93,21 @@ Welcome to **APTX4869**, the advanced kernel-mode driver designed for unmatched 
 - **Initialization:** Sets up necessary components for operation and self-repair.
 - **Periodic Maintenance:** Timer-driven self-repair ensures continued operation and stealth.
 
+## Known Issues
+
+**APTX4869** is an advanced rootkit driver, but it is still a work in progress and may have issues. Notably:
+
+- **System Stability:** The driver may cause system instability or Blue Screens of Death (BSODs) in certain scenarios.
+- **Functionality Gaps:** Some features may be incomplete or malfunction under specific conditions.
+- **Compatibility:** May not fully support all Windows versions or configurations.
+
 ## Conclusion
 
 **APTX4869** stands as a cutting-edge example of kernel-mode persistence and stealth. By integrating advanced techniques for hiding, self-repair, and persistence, this driver represents a significant achievement in exploit development. It embodies the relentless pursuit of maintaining a presence in the system, surviving detection, and ensuring recovery, no matter the challenge.
+
+*This project is intended for educational purposes. Always ensure you have proper authorization before deploying or testing these techniques. The driver is not complete and may have issues that could impact system stability.*
+
+https://github.com/user-attachments/assets/0531fa1c-d847-4eab-bd0f-a25e997b9358
+
+
+
