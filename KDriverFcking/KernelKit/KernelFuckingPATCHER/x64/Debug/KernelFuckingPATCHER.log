@@ -1,0 +1,11 @@
+﻿  Building 'KernelFuckingPATCHER' with toolset 'WindowsKernelModeDriver10.0' and the 'Universal' target platform.
+  KernelKit.c
+C:\Users\Administrator\Desktop\KDriverFcking\KernelKit\KernelFuckingPATCHER\KernelKit.c(402,20): warning C4100: 'DriverObject': unreferenced formal parameter
+C:\Users\Administrator\Desktop\KDriverFcking\KernelKit\KernelFuckingPATCHER\KernelKit.c(500,73): warning C4100: 'RegistryPath': unreferenced formal parameter
+C:\Users\Administrator\Desktop\KDriverFcking\KernelKit\KernelFuckingPATCHER\KernelKit.c(553,42): warning C4100: 'DeviceObject': unreferenced formal parameter
+C:\Users\Administrator\Desktop\KDriverFcking\KernelKit\KernelFuckingPATCHER\KernelKit.c(586,20): warning C4189: 'deviceName': local variable is initialized but not referenced
+  KernelFuckingPATCHER.vcxproj -> C:\Users\Administrator\Desktop\KDriverFcking\KernelKit\x64\Debug\KernelFuckingPATCHER.sys
+  Done Adding Additional Store
+  Successfully signed: C:\Users\Administrator\Desktop\KDriverFcking\KernelKit\x64\Debug\KernelFuckingPATCHER.sys
+  
+  Driver is 'Universal'.
