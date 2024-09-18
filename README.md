@@ -24,7 +24,7 @@ The **APTX4869** rootkit uses several advanced methods to remain hidden and acti
 
 - **Reboot-Resistant**: The rootkit remains active and invisible until a complete system reboot is performed. 
 
-- ""More advanced techniques to be integrated soon.""
+- *More advanced techniques to be integrated soon.*
 
 ### Final Point
 APTX4869 is designed for highly advanced persistence and stealth in Windows environments. Once loaded, it can be removed only through reboot, making it a formidable rootkit for long-term control over compromised systems. This driver is continually evolving, with more stealth and persistence features being developed for future releases.
