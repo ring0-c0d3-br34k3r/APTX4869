@@ -1,0 +1,23 @@
+﻿  Building 'APTX4869' with toolset 'WindowsKernelModeDriver10.0' and the 'Universal' target platform.
+  Stamping x64\Debug\APTX4869.inf
+  Stamping [Version] section with DriverVer=09/18/2024,19.36.2.519
+  APTX4869.c
+  APTX4869.vcxproj -> C:\Users\Administrator\Desktop\APTX4869rkit\APTX4869\APTX4869\x64\Debug\APTX4869.sys
+  Done Adding Additional Store
+  Successfully signed: C:\Users\Administrator\Desktop\APTX4869rkit\APTX4869\APTX4869\x64\Debug\APTX4869.sys
+  
+  Driver is 'Universal'.
+  .........................
+  Signability test complete.
+  
+  Errors:
+  None
+  
+  Warnings:
+  None
+  
+  Catalog generation complete.
+  C:\Users\Administrator\Desktop\APTX4869rkit\APTX4869\APTX4869\x64\Debug\APTX4869\aptx4869.cat
+  Done Adding Additional Store
+  Successfully signed: C:\Users\Administrator\Desktop\APTX4869rkit\APTX4869\APTX4869\x64\Debug\APTX4869\aptx4869.cat
+  

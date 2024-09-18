@@ -1,0 +1,62 @@
+;
+; APTX4869.inf
+;
+
+[Version]
+Signature   = "$WINDOWS NT$"
+Class       = System ; TODO: specify appropriate Class
+ClassGuid   = {4d36e97d-e325-11ce-bfc1-08002be10318} ; TODO: specify appropriate ClassGuid
+Provider    = %ManufacturerName%
+CatalogFile = APTX4869.cat
+DriverVer = 09/18/2024,19.36.2.519
+PnpLockdown = 1
+
+[DestinationDirs]
+DefaultDestDir = 13
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+[SourceDisksFiles]
+APTX4869.sys = 1,,
+
+;*****************************************
+; Install Section
+;*****************************************
+
+[Manufacturer]
+%ManufacturerName% = Standard,NTamd64.10.0...16299 ; %13% support introduced in build 16299
+
+[Standard.NTamd64.10.0...16299]
+%APTX4869.DeviceDesc% = APTX4869_Device, Root\APTX4869 ; TODO: edit hw-id
+
+[APTX4869_Device.NT]
+CopyFiles = File_Copy
+
+[File_Copy]
+APTX4869.sys
+
+;-------------- Service installation
+[APTX4869_Device.NT.Services]
+AddService = APTX4869,%SPSVCINST_ASSOCSERVICE%, APTX4869_Service_Inst
+
+; -------------- APTX4869 driver install sections
+[APTX4869_Service_Inst]
+DisplayName    = %APTX4869.SVCDESC%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_DEMAND_START
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %13%\APTX4869.sys
+
+[APTX4869_Device.NT.Wdf]
+KmdfService = APTX4869, APTX4869_wdfsect
+
+[APTX4869_wdfsect]
+KmdfLibraryVersion = 1.15
+
+[Strings]
+SPSVCINST_ASSOCSERVICE = 0x00000002
+ManufacturerName = "<Your manufacturer name>" ;TODO: Replace with your manufacturer name
+DiskName = "APTX4869 Installation Disk"
+APTX4869.DeviceDesc = "APTX4869 Device"
+APTX4869.SVCDESC = "APTX4869 Service"
