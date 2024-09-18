@@ -29,7 +29,6 @@ typedef struct _OBJECT_DIRECTORY_ENTRY {
 extern PVOID PsLoadedModuleList;
 extern PVOID PsActiveProcessHead;
 
-#define IOCTL_START_OPERATION CTL_CODE(FILE_DEVICE_UNKNOWN, 0x800, METHOD_BUFFERED, FILE_SHARE_READ | FILE_SHARE_WRITE)
 
 typedef struct _LDR_DATA_TABLE_ENTRY {
     LIST_ENTRY InLoadOrderLinks;
