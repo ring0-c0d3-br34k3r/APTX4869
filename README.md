@@ -24,6 +24,13 @@ The **APTX4869** rootkit uses several advanced methods to remain hidden and acti
 
 - **Reboot-Resistant**: The rootkit remains active and invisible until a complete system reboot is performed. 
 
+## **Log File Support (Issue: Debug Printing)**
+- One of the challenges encountered during development was reliable debug printing in the kernel. Debug print outputs (`DbgPrint`) sometimes fail or don't display correctly in certain environments. To solve this, the rootkit implements a log file system that captures key events and errors during operation.
+
+- **Persistent Log File**: Events are logged to a file on the disk, which serves as a reliable way to debug and monitor the driver’s activities.
+  
+- **Issue with Debug Printing**: In kernel debugging, there are known limitations with `DbgPrint` and its output visibility, especially when dealing with kernel-mode drivers. In response, a logging mechanism was developed that writes logs directly to a file, bypassing the inconsistent debug print behavior.
+
 - *More advanced techniques to be integrated soon.*
 
 ### Final Point
