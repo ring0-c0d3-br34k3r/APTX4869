@@ -9,7 +9,8 @@
 
 static HANDLE logFileHandle = NULL;
 
-VOID InitializeLogFile(VOID) {
+VOID 
+InitializeLogFile(VOID) {
     OBJECT_ATTRIBUTES objAttr;
     UNICODE_STRING fileName;
     IO_STATUS_BLOCK ioStatus;
@@ -24,7 +25,8 @@ VOID InitializeLogFile(VOID) {
     }
 }
 
-VOID LogMessage(const char* format, ...) {
+VOID 
+LogMessage(const char* format, ...) {
     if (logFileHandle == NULL) {
         InitializeLogFile();
     }
@@ -53,7 +55,8 @@ VOID LogMessage(const char* format, ...) {
     }
 }
 
-VOID CloseLogFile(VOID) {
+VOID 
+CloseLogFile(VOID) {
     if (logFileHandle != NULL) {
         ZwClose(logFileHandle);
         logFileHandle = NULL;
