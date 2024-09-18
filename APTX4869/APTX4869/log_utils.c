@@ -1,3 +1,5 @@
+// i found some prblems with PrintDbg and PrintDbgEx, soo log file is better than..
+// :3
 #include "log_utils.h"
 #include <stdarg.h>
 #include <wchar.h>
