@@ -1,7 +1,7 @@
 # APTX4869: The Never Ending Driver
 
 ## The Never Ending Driver
-**"APTX4869"** is an advanced Windows kernel rootkit designed to achieve extreme persistence and stealth in system environments. It leverages deep kernel manipulation techniques to hide its presence, making it virtually impossible to detect or unload without a full system reboot. This rootkit modifies critical kernel structures and employs anti-detection mechanisms, ensuring that even sophisticated monitoring tools struggle to identify its presence.
+**"APTX4869"** is a x64 Ring 0 rootkit designed to achieve extreme persistence and stealth in system environments. It leverages deep kernel manipulation techniques to hide its presence, making it virtually impossible to detect or unload without a full system reboot. This rootkit modifies critical kernel structures and employs anti-detection mechanisms, ensuring that even sophisticated monitoring tools struggle to identify its presence.
 
 ### Advanced Stealth and Persistence
 The **APTX4869** rootkit uses several advanced methods to remain hidden and active within the system, including:
