@@ -37,3 +37,9 @@ The **APTX4869** rootkit uses several advanced methods to remain hidden and acti
 
 ### Final Point
 APTX4869 is designed for highly advanced persistence and stealth in Windows environments. Once loaded, it can be removed only through reboot, making it a formidable rootkit for long-term control over compromised systems. This driver is continually evolving, with more stealth and persistence features being developed for future releases.
+
+
+
+
+### => Big Note  
+"Once loaded, the rootkit can only be removed through a system reboot. Before that happens, I can disable Secure Boot and establish persistence using a UEFI bootkit. This allows me to reload the rootkit every time the system boots. After the initial deployment, the rootkit will remain in the system permanently, unless the drive is formatted or UEFI firmware is restored to its original state."
